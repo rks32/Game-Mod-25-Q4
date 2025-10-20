@@ -27,6 +27,8 @@ protected:
 	virtual void		OnTacticalChange	( aiTactical_t oldTactical );
 	virtual void		OnDeath				( void );
 
+	idStr				Weapons[10]			{ "Weapon_shotgun", "Weapon_rocketlauncher", "Weapon_nailgun", "Weapon_railgun", "Weapon_grenadelauncher", "Weapon_DarkMatterGun", "Weapon_hyperblaster", "Weapon_lightninggun", "Weapon_napalmgun", "Weapon_machinegun" };
+
 private:
 
 	int					standingMeleeNoAttackTime;
@@ -195,6 +197,16 @@ rvMonsterGrunt::OnDeath
 ================
 */
 void rvMonsterGrunt::OnDeath ( void ) {
+	idDict args;
+
+	idVec3 dropOrigin = GetPhysics()->GetOrigin();
+	dropOrigin.z += 10.0f;
+	args.SetVector("origin", dropOrigin);
+
+	int weaponChoice = rand() % 10;
+
+	idEntity* dropped = gameLocal.SpawnEntityDef(Weapons[weaponChoice], &args);
+	
 	RageStop ( );
 	return idAI::OnDeath ( );
 }
